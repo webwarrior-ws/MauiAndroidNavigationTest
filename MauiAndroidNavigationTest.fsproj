@@ -13,6 +13,7 @@
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>MauiAndroidNavigationTest</RootNamespace>
+        <DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
 
         <!-- Display name -->
         <ApplicationTitle>MauiAndroidNavigationTest</ApplicationTitle>
@@ -61,9 +62,41 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="FSharp.Core" Version="6.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>      
+      <Compile Include="ThirdPage.xaml.fs">
+        <DependentUpon>ThirdPage.xaml</DependentUpon>
+      </Compile>
+      <Compile Include="SecondPage.xaml.fs">
+        <DependentUpon>SecondPage.xaml</DependentUpon>
+      </Compile>
+      <Compile Include="MainPage.xaml.fs">
+        <DependentUpon>MainPage.xaml</DependentUpon>
+      </Compile>
+      <Compile Include="App.xaml.fs">
+        <DependentUpon>App.xaml</DependentUpon>
+      </Compile>
+        <Compile Include="MauiProgram.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
       <MauiXaml Update="ThirdPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
     </ItemGroup>
 
+    <ItemGroup Condition="$(TargetPlatformIdentifier) == 'android'">
+        <AndroidResource Include="$(MonoAndroidResourcePrefix)/*/*" />
+        <AndroidResource Remove="$(MonoAndroidResourcePrefix)/raw/.*" />
+        <AndroidResource Update="$(MonoAndroidResourcePrefix)/raw/*" />
+        <AndroidAsset Include="$(MonoAndroidAssetsPrefix)/**/*" Exclude="$(MonoAndroidAssetsPrefix)/**/.*/**" />
+        <AndroidManifest Include="$(AndroidProjectFolder)AndroidManifest.xml" />
+        <Compile Include="$(AndroidProjectFolder)MainActivity.fs" />
+        <Compile Include="$(AndroidProjectFolder)MainApplication.fs" />
+
+        <PackageReference Include="FSharp.Android.Resource" Version="1.0.4" />
+    </ItemGroup>
+    
 </Project>
