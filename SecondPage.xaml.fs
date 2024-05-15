@@ -13,7 +13,7 @@ type SecondPage() =
 
     let _ = base.LoadFromXaml(typeof<SecondPage>)
 
-    member this.OnCounterClicked(sender: obj, e: EventArgs) =
+    member this.OnButtonClicked(sender: obj, e: EventArgs) =
         MainThread.BeginInvokeOnMainThread(fun () ->
             let newPage = new ThirdPage()
             NavigationPage.SetHasNavigationBar(newPage, true)
