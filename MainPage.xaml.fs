@@ -8,23 +8,28 @@ open Microsoft.Maui.Controls.Xaml
 open Microsoft.Maui.ApplicationModel
 
 
-type MainPage() =
+type MainPage() as this =
     inherit ContentPage()
 
     let _ = base.LoadFromXaml(typeof<MainPage>)
+
+    do this.Init()
     
-    member this.OnCounterClicked(sender: obj, e: EventArgs) =
-        Android.Util.Log.Debug("Custom", "Go to second page button clicked") |> ignore
-        MainThread.BeginInvokeOnMainThread(fun () ->
-            let newPage = new SecondPage()
-            NavigationPage.SetHasNavigationBar(newPage, true)
+    member this.Init() =
+        async {
+            Android.Util.Log.Debug("Custom", "Go to second page button clicked") |> ignore
+            MainThread.BeginInvokeOnMainThread(fun () ->
+                let newPage = new SecondPage()
+                NavigationPage.SetHasNavigationBar(newPage, false)
 
-            let navPage = new NavigationPage(newPage)
+                let navPage = new NavigationPage(newPage)
 
-            Android.Util.Log.Debug("Custom", "Navigating to second page") |> ignore
-            this.Navigation.InsertPageBefore(navPage, this)
-            this.Navigation.PopAsync().ContinueWith((fun (t: Task) -> 
-                Android.Util.Log.Debug("Custom" ,sprintf "Exception: %A" t.Exception) |> ignore
-            ), TaskContinuationOptions.OnlyOnFaulted)
-            |> ignore
-        );
+                Android.Util.Log.Debug("Custom", "Navigating to second page") |> ignore
+                this.Navigation.InsertPageBefore(navPage, this)
+                this.Navigation.PopAsync().ContinueWith((fun (t: Task) -> 
+                    Android.Util.Log.Debug("Custom" ,sprintf "Exception: %A" t.Exception) |> ignore
+                ), TaskContinuationOptions.OnlyOnFaulted)
+                |> ignore
+            )
+        }
+        |> Async.Start

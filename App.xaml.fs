@@ -11,7 +11,7 @@ type App() as this =
     do
         let firstPage = new MainPage()
         let navPage = new NavigationPage(firstPage)
-        NavigationPage.SetHasNavigationBar(firstPage, true)
+        NavigationPage.SetHasNavigationBar(firstPage, false)
 
         this.MainPage <- navPage
 
